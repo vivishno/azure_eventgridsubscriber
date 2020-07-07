@@ -13,8 +13,8 @@ def main():
     # # Loading input values
     # print("::debug::Loading input values")
     events_file = os.environ.get("INPUT_EVENTS_MAPFILE", default="event_subscriptions.json")
-    azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{"clientId": "163bcab7-55af-4f44-81f9-2a3d53175666", "clientSecret": "93a29f6b-52d5-44d1-a2b7-f1d17d3c6285", "subscriptionId": "c00d16c7-6c1f-4c03-9be1-6934a4c49682", "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"}')
-    resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="ashkuma_functionAppRsGroup")
+    azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
+    resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
     pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
     
 
