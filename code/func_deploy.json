@@ -32,7 +32,7 @@
         },
         "ownerName":{
             "type":"string",
-            "defaultValue": "aml_infra",
+            "defaultValue": "azure_eventgirdsubscriber",
             "metadata": {
                 "description": "Owner of this deployment, person to contact for question."
             }
@@ -140,6 +140,7 @@
                     "dependsOn": [
                       "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
                     ],
+                    
                     "properties": {
                         "repoUrl": "[parameters('functionGitHubURL')]",
                         "branch": "[parameters('functionGitHubBranch')]",
@@ -198,5 +199,10 @@
             }
         }
     ],
-    "outputs":{}
+    "outputs":{
+	        "Key": {
+            "type": "string",
+            "value": "[listkeys(resourceId('Microsoft.Web/sites/host', variables('funcAppName'), 'default'), '2019-08-01').functionKeys.default]"
+        }
+    }
 }

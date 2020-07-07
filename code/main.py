@@ -2,17 +2,19 @@ import os
 import json
 import time
 from json import JSONDecodeError
-from utils import AMLConfigurationException, ActionDeploymentError, CredentialsVerificationError, ResourceManagementError, required_parameters_provided, mask_parameter, get_template_parameters
+from utils import AMLConfigurationException, ActionDeploymentError, CredentialsVerificationError, ResourceManagementError, mask_parameter, required_parameters_provided
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
+from azure.mgmt.resource.resources.models import Deployment
+from azure.mgmt.resource.resources.models import DeploymentProperties
 
 def main():
     # # Loading input values
     # print("::debug::Loading input values")
     events_file = os.environ.get("INPUT_EVENTS_MAPFILE", default="event_subscriptions.json")
-    azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default="{}")
-    resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default=None)
+    azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{"clientId": "163bcab7-55af-4f44-81f9-2a3d53175666", "clientSecret": "93a29f6b-52d5-44d1-a2b7-f1d17d3c6285", "subscriptionId": "c00d16c7-6c1f-4c03-9be1-6934a4c49682", "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"}')
+    resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="ashkuma_functionAppRsGroup")
     pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
     
 
@@ -35,9 +37,9 @@ def main():
 
     # # Loading parameters file
     # print("::debug::Loading parameters file")
-    events_file_path = os.path.join(".cloud", ".azure", events_file)
-    template_params_file_path = os.path.join("", "func_deploy.params.json")
-    template_file_file_path = os.path.join("", "func_deploy.json")
+    #events_file_path = os.path.join(".cloud", ".azure", events_file)
+
+    template_file_file_path = os.path.join("code", "func_deploy.json")
 
     # Mask values
     print("::debug::Masking parameters")
@@ -66,12 +68,12 @@ def main():
     ####################### Authentication Done ###################################   
 
     # repository name
-    repository_name = os.environ.get("GITHUB_REPOSITORY")
+    repository_name = os.environ.get("GITHUB_REPOSITORY", "azureeventgridsample")
     functionAppName=repository_name.replace("/","_") # create a unique function-AppName
     functionFolder='fappdeploy'
     functionGitHubURL="https://github.com/mlopstemplates/function_app.git"
     functionGitHubBranch="master"
-    functionName = "generic_triggers"
+    functionName = "PrettyPoisons"
     patToken = pattoken
     parameters = {
             'functionAppName': functionAppName,
@@ -94,29 +96,38 @@ def main():
     template=None
     with open(template_file_file_path, 'r') as template_file_fd:
         template = json.load(template_file_fd)
-        
-    deployment_properties = {
-        'properties':{
-            'mode': DeploymentMode.incremental,
-            'template': template,
-            'parameters': parameters
-        }
-     }
+
+    # deployment_properties = {
+    #     'properties':{
+    #         'mode': DeploymentMode.incremental,
+    #         'template': template,
+    #         'parameters': parameters
+    #     }
+    # }
+
+    deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
+
+    #print(deployment_properties)
+
     try:
-        validate=client.deployments.validate(resource_group,"azure-sample",deployment_properties)
-        validate.wait()
+        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties)
+        #validate.wait()
+        
     except Exception as ex:
         raise ActionDeploymentError(ex)    
     try:
         deployment_async_operation = client.deployments.create_or_update(
                 resource_group,
                 'azure-sample',
-                deployment_properties
+                properties=deployment_properties
             )
         deployment_async_operation.wait()
     except Exception as ex:
         raise ActionDeploymentError(ex)
     print("Deployment done")
+    deploymemnt_result = deployment_async_operation.result();
+    #print(deploymemnt_result)
+    print(deploymemnt_result.properties.outputs)
 
 if __name__ == "__main__":
     main()
