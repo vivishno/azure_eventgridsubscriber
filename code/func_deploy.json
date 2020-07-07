@@ -73,10 +73,6 @@
                         "type": "SystemAssigned"
                     },
             "location": "[resourceGroup().location]",
-            "tags": {
-                "Owner": "[parameters('ownerName')]",
-                "ExpireOn": "[parameters('ExpireOn')]"
-            },
             "dependsOn": [
                 "[concat('microsoft.insights/components/', variables('insightsAppName'))]",
                 "[concat('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
@@ -200,9 +196,17 @@
         }
     ],
     "outputs":{
+<<<<<<< HEAD
 	        "Key": {
+=======
+        "Key": {
+>>>>>>> ec2bca99956cec97e49f4b76612cff2211103453
             "type": "string",
             "value": "[listkeys(resourceId('Microsoft.Web/sites/host', variables('funcAppName'), 'default'), '2019-08-01').functionKeys.default]"
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ec2bca99956cec97e49f4b76612cff2211103453
