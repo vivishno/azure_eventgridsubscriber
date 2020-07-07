@@ -129,5 +129,49 @@ def main():
     #print(deploymemnt_result)
     print(deploymemnt_result.properties.outputs)
 
+
+    # Events subscription
+
+    # open events description file
+    event_description = None
+    with open(events_file, 'r') as events_file_fd:
+        event_description = json.load(events_file_fd)
+
+    # parameters
+    code = deploymemnt_result.properties.outputs['key']['value']
+    resource_group = event_description["resource_group"]
+    provider = event_description["provider_type"]
+    included_events = event_description["events_to_subscribe"]
+
+    function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
+    # not sure if there should be something after provider value
+    resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
+
+    event_grid_client = EventGridManagementClient(credentials, subscription_id)
+    event_subscription_name = 'EventSubscription1'
+
+    destination = WebHookEventSubscriptionDestination(
+        endpoint_url = function_url
+    )
+    filter = EventSubscriptionFilter(
+        # By default, "All" event types are included
+        included_event_types = included_events,
+        is_subject_case_sensitive=False,
+        subject_begins_with='',
+        subject_ends_with=''
+    )
+
+    event_subscription_info = EventSubscription(
+        destination=destination, filter=filter)
+
+    event_subscription_async_poller = event_grid_client.event_subscriptions.create_or_update(
+        resource_id,
+        event_subscription_name,
+        event_subscription_info,
+    )
+
+    event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
+    print_item(event_subscription)
+
 if __name__ == "__main__":
     main()
