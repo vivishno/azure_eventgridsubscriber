@@ -196,17 +196,9 @@
         }
     ],
     "outputs":{
-<<<<<<< HEAD
-	        "Key": {
-=======
         "Key": {
->>>>>>> ec2bca99956cec97e49f4b76612cff2211103453
             "type": "string",
             "value": "[listkeys(resourceId('Microsoft.Web/sites/host', variables('funcAppName'), 'default'), '2019-08-01').functionKeys.default]"
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ec2bca99956cec97e49f4b76612cff2211103453
