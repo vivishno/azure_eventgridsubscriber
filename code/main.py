@@ -35,7 +35,8 @@ def main():
     # # Loading parameters file
     # print("::debug::Loading parameters file")
     events_file_path = os.path.join(".cloud", ".azure", events_file)
-    template_params_file_path = os.path.join(".cloud", ".azure", template_params_file)
+    template_params_file_path = os.path.join("", "deploy.params.json")
+    template_file_file_path = os.path.join("", "deploy.json")
 
     # Mask values
     print("::debug::Masking parameters")
@@ -50,7 +51,7 @@ def main():
     service_principal_password=azure_credentials.get("clientSecret", "")
     subscriptionId=azure_credentials.get("subscriptionId", "")
     
-    parameters=get_template_parameters(template_params_file_path,mapped_params)
+    parameters=get_template_parameters(template_params_file_path)
     credentials=None
     try:
         credentials = ServicePrincipalCredentials(
