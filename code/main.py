@@ -9,7 +9,6 @@ from azure.mgmt.resource.resources.models import DeploymentMode
 
 def main():
     # # Loading input values
-  events_mapfile:
     # print("::debug::Loading input values")
     events_file = os.environ.get("INPUT_EVENTS_MAPFILE", default="event_subscriptions.json")
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default="{}")
@@ -25,6 +24,7 @@ def main():
 
     if not resource_group:
         raise AMLConfigurationException(f"A resource group must be provided")
+    
     # Checking provided parameters
     print("::debug::Checking provided parameters")
     required_parameters_provided(
@@ -44,7 +44,7 @@ def main():
     mask_parameter(parameter=azure_credentials.get("tenantId", ""))
     mask_parameter(parameter=azure_credentials.get("clientId", ""))
     mask_parameter(parameter=azure_credentials.get("clientSecret", ""))
-    #mask_parameter(parameter=azure_credentials.get("subscriptionId", ""))
+    mask_parameter(parameter=azure_credentials.get("subscriptionId", ""))
     
     # Login User on CLI
     tenant_id=azure_credentials.get("tenantId", "")
@@ -52,7 +52,7 @@ def main():
     service_principal_password=azure_credentials.get("clientSecret", "")
     subscriptionId=azure_credentials.get("subscriptionId", "")
     
-    parameters=get_template_parameters(template_params_file_path,pattoken)
+    
     credentials=None
     try:
         credentials = ServicePrincipalCredentials(
@@ -63,6 +63,28 @@ def main():
     except Exception as ex:
        raise CredentialsVerificationError(ex)
     
+    ####################### Authentication Done ###################################   
+
+    # repository name
+    repository_name = os.environ.get("GITHUB_REPOSITORY")
+    functionAppName=repository_name.replace("/","_") # create a unique function-AppName
+    functionFolder='fappdeploy'
+    functionGitHubURL="https://github.com/mlopstemplates/function_app.git"
+    functionGitHubBranch="master"
+    functionName = "generic_triggers"
+    patToken = pattoken
+    parameters = {
+            'functionAppName': functionAppName,
+            'functionFolder': functionFolder,
+            'functionGitHubURL': functionGitHubURL,
+            'functionGitHubBranch': functionGitHubBranch,
+            'functionName': functionName,
+            'patToken': patToken,
+            'ownerName': functionAppName
+        }
+
+    parameters = {k: {'value': v} for k, v in parameters.items()}
+
     client=None
     try:    
         client = ResourceManagementClient(credentials, subscriptionId)
