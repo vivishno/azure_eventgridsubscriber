@@ -37,8 +37,8 @@ def main():
 
     # # Loading parameters file
     # print("::debug::Loading parameters file")
-    #events_file_path = os.path.join(".cloud", ".azure", events_file)
 
+    events_file_path = os.path.join(".cloud", ".azure", events_file)
     template_file_file_path = os.path.join("code", "func_deploy.json")
 
     # Mask values
@@ -134,7 +134,7 @@ def main():
 
     # open events description file
     event_description = None
-    with open(events_file, 'r') as events_file_fd:
+    with open(events_file_path, 'r') as events_file_fd:
         event_description = json.load(events_file_fd)
 
     # parameters
