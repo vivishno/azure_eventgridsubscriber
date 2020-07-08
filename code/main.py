@@ -136,7 +136,7 @@ def main():
         event_description = json.load(events_file_fd)
 
     # parameters
-    code = deploymemnt_result.properties.outputs['hostkey']['value']
+    code = deploymemnt_result.properties.outputs['hostKey']['value']
     functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
 
     resource_group = event_description["resource_group"]
