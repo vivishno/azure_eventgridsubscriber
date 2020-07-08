@@ -166,10 +166,8 @@ def main():
     )
 
     event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
-    print(event_subscription.destination)
-    print(f"::set-output name=destination::{event_subscription.destination}")
-    
-    
+    print(f"::set-output name=destination_url::{event_subscription.destination.endpoint_base_url}")
+
 
 if __name__ == "__main__":
     main()

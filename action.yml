@@ -17,7 +17,7 @@ inputs:
     description: "personal access token"
     required: true
 outputs:
-  destination:
+  destination_url:
     description: "destination url where event is assigned"
 branding:
   icon: "chevron-up"
