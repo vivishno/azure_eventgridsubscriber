@@ -112,7 +112,7 @@ def main():
     #print(deployment_properties)
 
     try:
-        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties)
+        validate=client.deployments.validate(resource_group,"azure-sample",parameters)
         #validate.wait()
         
     except Exception as ex:
@@ -121,7 +121,7 @@ def main():
         deployment_async_operation = client.deployments.create_or_update(
                 resource_group,
                 'azure-sample',
-                properties=deployment_properties
+                parameters
             )
         deployment_async_operation.wait()
     except Exception as ex:
