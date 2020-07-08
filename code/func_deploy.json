@@ -196,9 +196,14 @@
         }
     ],
     "outputs":{
-        "Key": {
+        "hostkey": {
             "type": "string",
             "value": "[listkeys(resourceId('Microsoft.Web/sites/host', variables('funcAppName'), 'default'), '2019-08-01').functionKeys.default]"
+        },
+        "functionAppName": {
+            "type": "string",
+            "value": "[variables('funcAppName')]"
         }
+        
     }
 }
