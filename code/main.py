@@ -138,13 +138,13 @@ def main():
         event_description = json.load(events_file_fd)
 
     # parameters
-    code = deploymemnt_result.properties.outputs['key']['value']
+    code = deploymemnt_result.properties.outputs['hostkey']['value']
+    functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
     resource_group = event_description["resource_group"]
     provider = event_description["provider_type"]
     included_events = event_description["events_to_subscribe"]
 
     function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
-    # not sure if there should be something after provider value
     resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
 
     event_grid_client = EventGridManagementClient(credentials, subscription_id)
