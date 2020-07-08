@@ -24,3 +24,4 @@ jobs:
           armtemplateparams_file: "arm_deploy.params.json"
           resource_group: "testgroup"
           pattoken: ${{secrets.PATTOKEN}}
+          
