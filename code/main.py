@@ -99,21 +99,17 @@ def main():
     with open(template_file_file_path, 'r') as template_file_fd:
         template = json.load(template_file_fd)
 
-    # deployment_properties = {
-    #     'properties':{
-    #         'mode': DeploymentMode.incremental,
-    #         'template': template,
-    #         'parameters': parameters
-    #     }
-    # }
-
-    deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
-
-    #print(deployment_properties)
+    deployment_properties = {
+        'properties':{
+            'mode': deploy_enum,
+            'template': template,
+            'parameters': parameters
+        }
+     }
 
     try:
-        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties)
-        #validate.wait()
+        validate=client.deployments.validate(resource_group,"azure-sample",deployment_properties)
+        validate.wait()
         
     except Exception as ex:
         raise ActionDeploymentError(ex)    
