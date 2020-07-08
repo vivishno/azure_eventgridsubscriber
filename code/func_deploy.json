@@ -56,7 +56,7 @@
         "funcStorageAccountName": "[tolower(concat(substring(parameters('functionAppName'), 0, min(length(parameters('functionAppName')),16)), variables('suffix'), 'stg'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('functionAppName'), 0, min(length(parameters('functionAppName')),14)), variables('suffix'), 'plan')]",
         "insightsAppName":"[concat(substring(parameters('functionAppName'), 0, min(length(parameters('functionAppName')),14)), variables('suffix'), '-meta')]",
-        "functionProjectFolder": "[parameters('functionFolder')]",
+        "functionProjectFolder": "[parameters('functionFolder')]"
     },
     "resources": [
         {
