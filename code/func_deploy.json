@@ -37,10 +37,6 @@
                 "description": "Owner of this deployment, person to contact for question."
             }
         },
-        "functionName" :{
-            "type": "string",
-            "defaultValue": "GridEventHandle"
-        },
         "functionFolder": {
             "type": "string",
             "metadata": {
@@ -61,7 +57,6 @@
         "funcHhostingPlanName": "[concat(substring(parameters('functionAppName'), 0, min(length(parameters('functionAppName')),14)), variables('suffix'), 'plan')]",
         "insightsAppName":"[concat(substring(parameters('functionAppName'), 0, min(length(parameters('functionAppName')),14)), variables('suffix'), '-meta')]",
         "functionProjectFolder": "[parameters('functionFolder')]",
-        "functionUrl" : "[concat('https://', variables('funcAppName'),'.azurewebsites.net/api/', parameters('functionName'),'?')]"
     },
     "resources": [
         {
@@ -196,7 +191,7 @@
         }
     ],
     "outputs":{
-        "hostkey": {
+        "hostKey": {
             "type": "string",
             "value": "[listkeys(resourceId('Microsoft.Web/sites/host', variables('funcAppName'), 'default'), '2019-08-01').functionKeys.default]"
         },
