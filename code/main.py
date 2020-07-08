@@ -16,8 +16,8 @@ def main():
     # # Loading input values
     # print("::debug::Loading input values")
     events_file = os.environ.get("INPUT_EVENTS_MAPFILE", default="event_subscriptions.json")
-    azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
-    resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
+    azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{"clientId": "163bcab7-55af-4f44-81f9-2a3d53175666", "clientSecret": "93a29f6b-52d5-44d1-a2b7-f1d17d3c6285", "subscriptionId": "c00d16c7-6c1f-4c03-9be1-6934a4c49682", "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"}')
+    resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="ashkuma_functionAppRsGroup")
     pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
     
 
@@ -99,20 +99,20 @@ def main():
     with open(template_file_file_path, 'r') as template_file_fd:
         template = json.load(template_file_fd)
 
-    # deployment_properties = {
-    #     'properties':{
-    #         'mode': DeploymentMode.incremental,
-    #         'template': template,
-    #         'parameters': parameters
-    #     }
-    # }
+    deployment_properties = {
+        'properties':{
+            'mode': DeploymentMode.incremental,
+            'template': template,
+            'parameters': parameters
+        }
+    }
 
-    deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
+    #deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
 
     #print(deployment_properties)
 
     try:
-        validate=client.deployments.validate(resource_group,"azure-sample",parameters)
+        validate=client.deployments.validate(resource_group,"azure-sample",deployment_properties)
         #validate.wait()
         
     except Exception as ex:
@@ -121,7 +121,7 @@ def main():
         deployment_async_operation = client.deployments.create_or_update(
                 resource_group,
                 'azure-sample',
-                parameters
+                deployment_properties
             )
         deployment_async_operation.wait()
     except Exception as ex:
@@ -134,48 +134,48 @@ def main():
 
     # Events subscription
 
-    # open events description file
-    event_description = None
-    with open(events_file, 'r') as events_file_fd:
-        event_description = json.load(events_file_fd)
+    # # open events description file
+    # event_description = None
+    # with open(events_file, 'r') as events_file_fd:
+    #     event_description = json.load(events_file_fd)
 
-    # parameters
-    code = deploymemnt_result.properties.outputs['hostkey']['value']
-    functionAppName=deploymemnt_result.properties.outputs['functionAppName']['value']
+    # # parameters
+    # code = deploymemnt_result.properties.outputs['hostkey']['value']
+    # functionAppName=deploymemnt_result.properties.outputs['functionAppName']['value']
     
-    resource_group = event_description["resource_group"]
-    provider = event_description["provider_type"]
-    included_events = event_description["events_to_subscribe"]
+    # resource_group = event_description["resource_group"]
+    # provider = event_description["provider_type"]
+    # included_events = event_description["events_to_subscribe"]
 
-    function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
-    # not sure if there should be something after provider value
-    resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
+    # function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
+    # # not sure if there should be something after provider value
+    # resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
 
-    event_grid_client = EventGridManagementClient(credentials, subscriptionId)
-    event_subscription_name = 'EventSubscription1'
+    # event_grid_client = EventGridManagementClient(credentials, subscriptionId)
+    # event_subscription_name = 'EventSubscription1'
 
-    destination = WebHookEventSubscriptionDestination(
-        endpoint_url = function_url
-    )
-    filter = EventSubscriptionFilter(
-        # By default, "All" event types are included
-        included_event_types = included_events,
-        is_subject_case_sensitive=False,
-        subject_begins_with='',
-        subject_ends_with=''
-    )
+    # destination = WebHookEventSubscriptionDestination(
+    #     endpoint_url = function_url
+    # )
+    # filter = EventSubscriptionFilter(
+    #     # By default, "All" event types are included
+    #     included_event_types = included_events,
+    #     is_subject_case_sensitive=False,
+    #     subject_begins_with='',
+    #     subject_ends_with=''
+    # )
 
-    event_subscription_info = EventSubscription(
-        destination=destination, filter=filter)
+    # event_subscription_info = EventSubscription(
+    #     destination=destination, filter=filter)
 
-    event_subscription_async_poller = event_grid_client.event_subscriptions.create_or_update(
-        resource_id,
-        event_subscription_name,
-        event_subscription_info,
-    )
+    # event_subscription_async_poller = event_grid_client.event_subscriptions.create_or_update(
+    #     resource_id,
+    #     event_subscription_name,
+    #     event_subscription_info,
+    # )
 
-    event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
-    print(event_subscription)
+    # event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
+    # print(event_subscription)
 
 if __name__ == "__main__":
     main()
