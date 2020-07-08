@@ -9,6 +9,13 @@ inputs:
     description: "file where all required event maps are existing"
     required: true
     default: event_subscription.json
+  resource_group:
+    description: "resource group which is to be used"
+    required: true
+    default: "newresource_grp"
+  pattoken:
+    description: "personal access token"
+    required: true
 outputs:
   experiment_name:
     description: "Name of the experiment of the run"

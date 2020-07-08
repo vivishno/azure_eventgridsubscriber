@@ -20,7 +20,6 @@ def main():
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
     pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
     
-
     try:
         azure_credentials = json.loads(azure_credentials)
     except JSONDecodeError:
@@ -40,8 +39,8 @@ def main():
 
     # # Loading parameters file
     # print("::debug::Loading parameters file")
-    #events_file_path = os.path.join(".cloud", ".azure", events_file)
 
+    events_file_path = os.path.join(".cloud", ".azure", events_file)
     template_file_file_path = os.path.join("code", "func_deploy.json")
 
     # Mask values
@@ -72,7 +71,8 @@ def main():
 
     # repository name
     repository_name = os.environ.get("GITHUB_REPOSITORY", "azureeventgridsample")
-    functionAppName=repository_name.replace("/","_") # create a unique function-AppName
+    functionAppName=repository_name.replace("/","") # create a unique function-AppName
+    functionAppName=functionAppName.replace("_","")
     functionFolder='fappdeploy'
     functionGitHubURL="https://github.com/mlopstemplates/function_app.git"
     functionGitHubBranch="master"
@@ -105,15 +105,11 @@ def main():
             'template': template,
             'parameters': parameters
         }
-    }
-
-    #deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
-
-    #print(deployment_properties)
-
+     }
+    
     try:
         validate=client.deployments.validate(resource_group,"azure-sample",deployment_properties)
-        #validate.wait()
+        validate.wait()
         
     except Exception as ex:
         raise ActionDeploymentError(ex)    
@@ -134,48 +130,47 @@ def main():
 
     # Events subscription
 
-    # # open events description file
-    # event_description = None
-    # with open(events_file, 'r') as events_file_fd:
-    #     event_description = json.load(events_file_fd)
+    # open events description file
+    event_description = None
+    with open(events_file_path, 'r') as events_file_fd:
+        event_description = json.load(events_file_fd)
 
-    # # parameters
-    # code = deploymemnt_result.properties.outputs['hostkey']['value']
-    # functionAppName=deploymemnt_result.properties.outputs['functionAppName']['value']
-    
-    # resource_group = event_description["resource_group"]
-    # provider = event_description["provider_type"]
-    # included_events = event_description["events_to_subscribe"]
+    # parameters
+    code = deploymemnt_result.properties.outputs['hostKey']['value']
+    functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
 
-    # function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
-    # # not sure if there should be something after provider value
-    # resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
+    resource_group = event_description["subscriptions"]["resource_group"]
+    provider = event_description["subscriptions"]["provider_type"]
+    included_events = event_description["subscriptions"]["events_to_subscribe"]
 
-    # event_grid_client = EventGridManagementClient(credentials, subscriptionId)
-    # event_subscription_name = 'EventSubscription1'
+    function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
+    resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
 
-    # destination = WebHookEventSubscriptionDestination(
-    #     endpoint_url = function_url
-    # )
-    # filter = EventSubscriptionFilter(
-    #     # By default, "All" event types are included
-    #     included_event_types = included_events,
-    #     is_subject_case_sensitive=False,
-    #     subject_begins_with='',
-    #     subject_ends_with=''
-    # )
+    event_grid_client = EventGridManagementClient(credentials, subscriptionId)
+    event_subscription_name = 'EventSubscription1'
 
-    # event_subscription_info = EventSubscription(
-    #     destination=destination, filter=filter)
+    destination = WebHookEventSubscriptionDestination(
+        endpoint_url = function_url
+    )
+    filter = EventSubscriptionFilter(
+        # By default, "All" event types are included
+        included_event_types = included_events,
+        is_subject_case_sensitive=False,
+        subject_begins_with='',
+        subject_ends_with=''
+    )
 
-    # event_subscription_async_poller = event_grid_client.event_subscriptions.create_or_update(
-    #     resource_id,
-    #     event_subscription_name,
-    #     event_subscription_info,
-    # )
+    event_subscription_info = EventSubscription(
+        destination=destination, filter=filter)
 
-    # event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
-    # print(event_subscription)
+    event_subscription_async_poller = event_grid_client.event_subscriptions.create_or_update(
+        resource_id,
+        event_subscription_name,
+        event_subscription_info,
+    )
+
+    event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
+    print(event_subscription)
 
 if __name__ == "__main__":
     main()

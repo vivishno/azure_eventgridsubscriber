@@ -29,7 +29,6 @@ def required_parameters_provided(parameters, keys, message="Required parameter n
     if len(missing_keys) > 0:
         raise AMLConfigurationException(f"{message} {missing_keys}")
 
-
 def mask_parameter(parameter):
     print(f"::add-mask::{parameter}")
 
