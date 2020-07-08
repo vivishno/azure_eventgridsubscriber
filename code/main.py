@@ -8,6 +8,9 @@ from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
 from azure.mgmt.resource.resources.models import Deployment
 from azure.mgmt.resource.resources.models import DeploymentProperties
+from azure.mgmt.resource import ResourceManagementClient
+from azure.mgmt.eventgrid import EventGridManagementClient
+from azure.mgmt.eventgrid.models import Topic, EventSubscriptionFilter, EventSubscription, WebHookEventSubscriptionDestination
 
 def main():
     # # Loading input values
@@ -80,7 +83,6 @@ def main():
             'functionFolder': functionFolder,
             'functionGitHubURL': functionGitHubURL,
             'functionGitHubBranch': functionGitHubBranch,
-            'functionName': functionName,
             'patToken': patToken,
             'ownerName': functionAppName
         }
@@ -140,6 +142,7 @@ def main():
     # parameters
     code = deploymemnt_result.properties.outputs['hostkey']['value']
     functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
+
     resource_group = event_description["resource_group"]
     provider = event_description["provider_type"]
     included_events = event_description["events_to_subscribe"]
@@ -147,7 +150,7 @@ def main():
     function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
     resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
 
-    event_grid_client = EventGridManagementClient(credentials, subscription_id)
+    event_grid_client = EventGridManagementClient(credentials, subscriptionId)
     event_subscription_name = 'EventSubscription1'
 
     destination = WebHookEventSubscriptionDestination(
@@ -171,7 +174,7 @@ def main():
     )
 
     event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
-    print_item(event_subscription)
+    print(event_subscription)
 
 if __name__ == "__main__":
     main()
