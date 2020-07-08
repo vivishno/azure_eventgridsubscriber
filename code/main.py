@@ -107,12 +107,19 @@ def main():
     #     }
     # }
 
-    deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
+    deployment_properties = {
+        'properties':{
+            'mode': DeploymentMode.incremental,
+            'template': template,
+            'parameters': parameters
+        }
+     }
+    #deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
 
     #print(deployment_properties)
 
     try:
-        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties,parameters=parameters)
+        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties)
         #validate.wait()
         
     except Exception as ex:
