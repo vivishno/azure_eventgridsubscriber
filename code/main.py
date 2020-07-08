@@ -72,6 +72,7 @@ def main():
     # repository name
     repository_name = os.environ.get("GITHUB_REPOSITORY", "azureeventgridsample")
     functionAppName=repository_name.replace("/","") # create a unique function-AppName
+    functionAppName=functionAppName.replace("_","")
     functionFolder='fappdeploy'
     functionGitHubURL="https://github.com/mlopstemplates/function_app.git"
     functionGitHubBranch="master"
