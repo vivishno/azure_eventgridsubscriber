@@ -112,7 +112,7 @@ def main():
     #print(deployment_properties)
 
     try:
-        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties)
+        validate=client.deployments.validate(resource_group,"azure-sample",properties=deployment_properties,parameters=parameters)
         #validate.wait()
         
     except Exception as ex:
