@@ -2,7 +2,7 @@ import os
 import json
 import time
 from json import JSONDecodeError
-from utils import AMLConfigurationException, ActionDeploymentError, CredentialsVerificationError, ResourceManagementError, mask_parameter, required_parameters_provided, get_deploy_mode_obj
+from utils import AMLConfigurationException, ActionDeploymentError, CredentialsVerificationError, ResourceManagementError, mask_parameter, required_parameters_provided
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
@@ -19,9 +19,6 @@ def main():
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
     pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
-    deployment_mode="Incremental"
-    
-    deploy_enum=get_deploy_mode_obj(deployment_mode)
     
     try:
         azure_credentials = json.loads(azure_credentials)
@@ -103,12 +100,12 @@ def main():
 
     deployment_properties = {
         'properties':{
-            'mode': deploy_enum,
+            'mode': DeploymentMode.incremental,
             'template': template,
             'parameters': parameters
         }
      }
-
+    
     try:
         validate=client.deployments.validate(resource_group,"azure-sample",deployment_properties)
         validate.wait()
