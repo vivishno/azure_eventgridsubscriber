@@ -2,8 +2,6 @@
 name: create-event-subscription 
 on:
   push:
-    branches:
-      - master
 
 jobs:
   train:
@@ -17,7 +15,7 @@ jobs:
     # Deploys function app and creates an event grid subscription
     - name: create event subscription
       id: azure_eventgridsubscriber
-      uses: mlopstemplates/azure_eventgridsubscriber@master
+      uses: mlopstemplates/azure_eventgridsubscriber@namrata
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           events_mapfile: "event_subscriptions.json.json"
