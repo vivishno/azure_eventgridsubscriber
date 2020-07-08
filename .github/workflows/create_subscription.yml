@@ -1,0 +1,26 @@
+# Test Actions create an event subscription to a function app
+name: create-event-subscription 
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+
+    # Deploys function app and creates an event grid subscription
+    - name: create event subscription
+      id: azure_eventgridsubscriber
+      uses: mlopstemplates/azure_eventgridsubscriber@master
+      with:
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          events_mapfile: "event_subscriptions.json.json"
+          armtemplateparams_file: "arm_deploy.params.json"
+          resource_group: "testgroup"
+          pattoken: ${{secrets.PATTOKEN}}
