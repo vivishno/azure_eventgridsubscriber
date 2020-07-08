@@ -122,14 +122,10 @@ def main():
         deployment_async_operation.wait()
     except Exception as ex:
         raise ActionDeploymentError(ex)
-    print("Deployment done")
+    
     deploymemnt_result = deployment_async_operation.result();
-    #print(deploymemnt_result)
-    print(deploymemnt_result.properties.outputs)
-
 
     # Events subscription
-
     # open events description file
     event_description = None
     with open(events_file_path, 'r') as events_file_fd:
@@ -170,7 +166,10 @@ def main():
     )
 
     event_subscription = event_subscription_async_poller.result()  # type: EventSubscription
-    print(event_subscription)
+    print(event_subscription.destination)
+    print(f"::set-output name=destination::{event_subscription.destination}")
+    
+    
 
 if __name__ == "__main__":
     main()

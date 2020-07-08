@@ -10,15 +10,15 @@ inputs:
     required: true
     default: event_subscription.json
   resource_group:
-    description: "resource group which is to be used"
+    description: "resource group which is to be used to deploy the function app"
     required: true
     default: "newresource_grp"
   pattoken:
     description: "personal access token"
     required: true
 outputs:
-  experiment_name:
-    description: "Name of the experiment of the run"
+  destination:
+    description: "destination url where event is assigned"
 branding:
   icon: "chevron-up"
   color: "blue"
