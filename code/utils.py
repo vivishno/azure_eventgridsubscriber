@@ -29,7 +29,14 @@ def required_parameters_provided(parameters, keys, message="Required parameter n
     if len(missing_keys) > 0:
         raise AMLConfigurationException(f"{message} {missing_keys}")
 
-
+def get_deploy_mode_obj(deployment_mode):
+    if deployment_mode=="Incremental":
+        return DeploymentMode.incremental
+    elif deployment_mode=="Complete":
+        return DeploymentMode.complete
+    else:
+        raise InvalidDeploymentModeException(f"Please provide deployment mode as \"Incremental\" or \"Complete\" only.")
+        
 def mask_parameter(parameter):
     print(f"::add-mask::{parameter}")
 
