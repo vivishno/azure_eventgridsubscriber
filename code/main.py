@@ -19,8 +19,10 @@ def main():
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
     pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
+    deployment_mode="Incremental"
     
-
+    deploy_enum=get_deploy_mode_obj(deployment_mode)
+    
     try:
         azure_credentials = json.loads(azure_credentials)
     except JSONDecodeError:
@@ -99,28 +101,17 @@ def main():
     with open(template_file_file_path, 'r') as template_file_fd:
         template = json.load(template_file_fd)
 
-    # deployment_properties = {
-    #     'properties':{
-    #         'mode': DeploymentMode.incremental,
-    #         'template': template,
-    #         'parameters': parameters
-    #     }
-    # }
-
     deployment_properties = {
         'properties':{
-            'mode': DeploymentMode.incremental,
+            'mode': deploy_enum,
             'template': template,
             'parameters': parameters
         }
      }
-    #deployment_properties = DeploymentProperties(mode=DeploymentMode.incremental, template=template, parameters=parameters) 
-
-    #print(deployment_properties)
 
     try:
         validate=client.deployments.validate(resource_group,"azure-sample",deployment_properties)
-        #validate.wait()
+        validate.wait()
         
     except Exception as ex:
         raise ActionDeploymentError(ex)    
