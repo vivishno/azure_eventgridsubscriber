@@ -139,9 +139,9 @@ def main():
     code = deploymemnt_result.properties.outputs['hostKey']['value']
     functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
 
-    resource_group = event_description["resource_group"]
-    provider = event_description["provider_type"]
-    included_events = event_description["events_to_subscribe"]
+    resource_group = event_description["subscriptions"]["resource_group"]
+    provider = event_description["subscriptions"]["provider_type"]
+    included_events = event_description["subscriptions"]["events_to_subscribe"]
 
     function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
     resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
