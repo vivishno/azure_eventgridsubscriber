@@ -76,7 +76,7 @@ def main():
     functionFolder='fappdeploy'
     functionGitHubURL="https://github.com/mlopstemplates/function_app.git"
     functionGitHubBranch="master"
-    functionName = "PrettyPoisons"
+    functionName = "generic_triggers"
     patToken = pattoken
     parameters = {
             'functionAppName': functionAppName,
