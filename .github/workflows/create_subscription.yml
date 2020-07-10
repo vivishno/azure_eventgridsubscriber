@@ -20,5 +20,4 @@ jobs:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           events_mapfile: "event_subscriptions.json"
           resource_group: "testgroup"
-          pattoken: ${{secrets.PATTOKEN}}
-          
+          pattoken: ${{secrets.PATTOKEN}}        
