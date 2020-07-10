@@ -1,7 +1,7 @@
 # Test Actions create an event subscription to a function app
 name: create-event-subscription 
 on:
-  push: 
+  push:
 
 jobs:
   train:
