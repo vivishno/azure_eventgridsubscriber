@@ -18,7 +18,7 @@ def main():
     events_file = os.environ.get("INPUT_EVENTS_MAPFILE", default="event_subscriptions.json")
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
-    pattoken = os.environ.get("INPUT_PAT_TOKEN",default="")
+    pattoken = os.environ.get("INPUT_PATTOKEN",default="")
     
     try:
         azure_credentials = json.loads(azure_credentials)
