@@ -19,6 +19,6 @@ jobs:
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           events_mapfile: "event_subscriptions.json"
-          resource_group: "check11" 
+          resource_group: "check11"
           pattoken: ${{secrets.PATTOKEN}}
           
