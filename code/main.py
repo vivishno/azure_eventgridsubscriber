@@ -15,17 +15,12 @@ from azure.mgmt.eventgrid.models import Topic, EventSubscriptionFilter, EventSub
 def main():
     # # Loading input values
     # print("::debug::Loading input values")
-    events_file = os.environ.get("INPUT_EVENTS_MAPFILE", default="event_subscriptions.json")
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
     pattoken = os.environ.get("INPUT_PATTOKEN",default="")
     provider_type = os.environ.get("INPUT_PROVIDER_TYPE",default="")
     events_to_subscribe= os.environ.get("INPUT_EVENTS_TO_SUBSCRIBE",default="")
-    included_events=events_to_subscribe.split(",")
-    print("here---------------------------")
-    print(provider_type)
-    print(included_events)
-    print("ended--------------------------")
+
     try:
         azure_credentials = json.loads(azure_credentials)
     except JSONDecodeError:
@@ -46,7 +41,6 @@ def main():
     # # Loading parameters file
     # print("::debug::Loading parameters file")
 
-    events_file_path = os.path.join(".cloud", ".azure", events_file)
     template_file_file_path = os.path.join("code", "func_deploy.json")
 
     # Mask values
@@ -60,8 +54,7 @@ def main():
     tenant_id=azure_credentials.get("tenantId", "")
     service_principal_id=azure_credentials.get("clientId", "")
     service_principal_password=azure_credentials.get("clientSecret", "")
-    subscriptionId=azure_credentials.get("subscriptionId", "")
-    
+    subscriptionId=azure_credentials.get("subscriptionId", "") 
     
     credentials=None
     try:
@@ -131,13 +124,10 @@ def main():
     
     deploymemnt_result = deployment_async_operation.result();
 
-
     # parameters
     code = deploymemnt_result.properties.outputs['hostKey']['value']
     functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
 
-    
-    print(provider_type)
     function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
     resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider_type)
 
@@ -147,6 +137,7 @@ def main():
     destination = WebHookEventSubscriptionDestination(
         endpoint_url = function_url
     )
+    included_events=events_to_subscribe.split(",")
     filter = EventSubscriptionFilter(
         # By default, "All" event types are included
         included_event_types = included_events,
