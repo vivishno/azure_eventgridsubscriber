@@ -16,6 +16,12 @@ inputs:
   pattoken:
     description: "personal access token"
     required: true
+  provider_type: "Microsoft.MachineLearningServices/workspaces/new11"
+    description: "provider type"
+    required: true
+  events_to_subscribe:
+    description: "events to subscribe"
+    required: true
 outputs:
   destination_url:
     description: "destination url where event is assigned"
