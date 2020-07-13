@@ -19,7 +19,13 @@ def main():
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default='{}')
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="")
     pattoken = os.environ.get("INPUT_PATTOKEN",default="")
-    
+    provider_type = os.environ.get("INPUT_PROVIDER_TYPE",default="")
+    events_to_subscribe= os.environ.get("INPUT_EVENTS_TO_SUBSCRIBE",default="")
+    included_events=events_to_subscribe.split(",")
+    print("here---------------------------")
+    print(provider_type)
+    print(events_to_subscribe)
+    print("ended--------------------------")
     try:
         azure_credentials = json.loads(azure_credentials)
     except JSONDecodeError:
@@ -125,22 +131,15 @@ def main():
     
     deploymemnt_result = deployment_async_operation.result();
 
-    # Events subscription
-    # open events description file
-    event_description = None
-    with open(events_file_path, 'r') as events_file_fd:
-        event_description = json.load(events_file_fd)
 
     # parameters
     code = deploymemnt_result.properties.outputs['hostKey']['value']
     functionAppName = deploymemnt_result.properties.outputs['functionAppName']['value']
 
-    resource_group = event_description["subscriptions"]["resource_group"]
-    provider = event_description["subscriptions"]["provider_type"]
-    included_events = event_description["subscriptions"]["events_to_subscribe"]
-
+    
+    print(provider_type)
     function_url = "https://{}.azurewebsites.net/api/{}?code={}&repoName={}".format(functionAppName, functionName,code,repository_name)
-    resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider)
+    resource_id = "/subscriptions/{}/resourceGroups/{}/providers/{}".format(subscriptionId,resource_group,provider_type)
 
     event_grid_client = EventGridManagementClient(credentials, subscriptionId)
     event_subscription_name = 'EventSubscription1'
