@@ -24,7 +24,7 @@ def main():
     included_events=events_to_subscribe.split(",")
     print("here---------------------------")
     print(provider_type)
-    print(events_to_subscribe)
+    print(included_events)
     print("ended--------------------------")
     try:
         azure_credentials = json.loads(azure_credentials)
