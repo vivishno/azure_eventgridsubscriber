@@ -18,15 +18,9 @@ jobs:
       uses: ./
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-<<<<<<< HEAD
           events_to_subscribe: |
             Microsoft.MachineLearningServices.RunStatusChanged
             Microsoft.MachineLearningServices.RunCompleted  
           provider_type: "Microsoft.MachineLearningServices/workspaces/amlconfiguretest"
           resource_group: "testgroup"
           pattoken: ${{secrets.PATTOKEN}}
-=======
-          events_mapfile: "event_subscriptions.json"
-          resource_group: "testgroup"
-          pattoken: ${{secrets.PATTOKEN}}        
->>>>>>> ef52e7f2b3bb34b1ff8a1f89f6fe2bb8a96725aa
