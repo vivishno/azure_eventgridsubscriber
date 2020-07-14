@@ -41,7 +41,7 @@ def main():
     # print("::debug::Loading parameters file")
 
     events_file_path = os.path.join(".cloud", ".azure", events_file)
-    template_file_file_path = os.path.join("code", "func_deploy.json")
+    template_file_file_path = os.path.join("/code", "func_deploy.json")
 
     # Mask values
     print("::debug::Masking parameters")
