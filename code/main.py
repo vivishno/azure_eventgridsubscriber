@@ -20,7 +20,8 @@ def main():
     pattoken = os.environ.get("INPUT_PATTOKEN",default="")
     provider_type = os.environ.get("INPUT_PROVIDER_TYPE",default="")
     events_to_subscribe= os.environ.get("INPUT_EVENTS_TO_SUBSCRIBE",default="")
-
+    print(events_to_subscribe)
+    print("here00=-=----------------------------------")
     try:
         azure_credentials = json.loads(azure_credentials)
     except JSONDecodeError:
