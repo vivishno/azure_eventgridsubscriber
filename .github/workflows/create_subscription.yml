@@ -18,6 +18,9 @@ jobs:
       uses: ./
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          events_to_subscribe: |
+            all
           provider_type: "Microsoft.MachineLearningServices/workspaces/new11"
           resource_group: "p1"
+          
           pattoken: ${{secrets.PATTOKEN}}
