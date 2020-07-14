@@ -17,7 +17,7 @@ inputs:
     required: true
   events_to_subscribe:
     description: "list of events to be subscribe from provider"
-    required: true
+    required: false
 outputs:
   destination_url:
     description: "destination url where event is assigned"
