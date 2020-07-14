@@ -18,7 +18,7 @@ jobs:
       uses: ./
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          provider_type: "Microsoft.MachineLearningServices/workspaces/amlconfigureTest"
+          provider_type: "Microsoft.MachineLearningServices/workspaces/new11"
           resource_group: "test2"
           events_to_subscribe: |
               Microsoft.MachineLearningServices.RunStatusChanged
