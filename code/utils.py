@@ -31,4 +31,16 @@ def required_parameters_provided(parameters, keys, message="Required parameter n
 
 def mask_parameter(parameter):
     print(f"::add-mask::{parameter}")
+    
+def get_events_list(events_to_subscribe):
+    events_to_subscribe=events_to_subscribe.split('\n')
+    events_list=[]
+    for i in events_to_subscribe:
+        if len(i)>0:
+            if i.lower()=='all':
+                return None
+            events_list.append(i)
+    if len(events_list)==0:
+        return None
+    return events_list;        
 

@@ -5,10 +5,6 @@ inputs:
   azure_credentials:
     description: "Paste output of `az ad sp create-for-rbac --name <your-sp-name> --role contributor --scopes /subscriptions/<your-subscriptionId>/resourceGroups/<your-rg> --sdk-auth` as value of secret variable: AZURE_CREDENTIALS"
     required: true
-  events_mapfile:
-    description: "file where all required event maps are existing"
-    required: true
-    default: event_subscription.json
   resource_group:
     description: "resource group which is to be used to deploy the function app"
     required: true
@@ -16,6 +12,12 @@ inputs:
   pattoken:
     description: "personal access token"
     required: true
+  provider_type:
+    description: "azure resource to be subscribed to "
+    required: true
+  events_to_subscribe:
+    description: "list of events to be subscribe from provider"
+    required: false
 outputs:
   destination_url:
     description: "destination url where event is assigned"
