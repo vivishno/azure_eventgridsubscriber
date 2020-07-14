@@ -19,7 +19,7 @@ jobs:
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           provider_type: "Microsoft.MachineLearningServices/workspaces/new11"
-          resource_group: "test2"
+          resource_group: "test5"
           events_to_subscribe: |
               Microsoft.MachineLearningServices.RunStatusChanged
               Microsoft.MachineLearningServices.RunCompleted
