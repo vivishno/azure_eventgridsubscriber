@@ -21,7 +21,6 @@ def main():
     provider_type = os.environ.get("INPUT_PROVIDER_TYPE",default="")
     events_to_subscribe= os.environ.get("INPUT_EVENTS_TO_SUBSCRIBE",default="")
     
-    events_to_subscribe=get_events_list(events_to_subscribe)
     try:
         azure_credentials = json.loads(azure_credentials)
     except JSONDecodeError:
@@ -138,7 +137,7 @@ def main():
     destination = WebHookEventSubscriptionDestination(
         endpoint_url = function_url
     )
-    included_events=events_to_subscribe.split(",")
+    included_events=get_events_list(events_to_subscribe)
     filter = EventSubscriptionFilter(
         # By default, "All" event types are included
         included_event_types = included_events,
