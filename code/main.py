@@ -139,6 +139,7 @@ def main():
     )
     
     included_events=get_events_list(events_to_subscribe)
+    print(included_events)
     filter = EventSubscriptionFilter(
         # By default, "All" event types are included
         included_event_types = included_events,
