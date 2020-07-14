@@ -19,13 +19,9 @@ jobs:
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           events_to_subscribe: |
-            
-            ABC
-            
-            all
-            
+            Microsoft.MachineLearningServices.RunStatusChanged
+            Microsoft.MachineLearningServices.RunCompleted
             
           provider_type: "Microsoft.MachineLearningServices/workspaces/new11"
-          resource_group: "p1"
-          
+          resource_group: "p2"
           pattoken: ${{secrets.PATTOKEN}}
