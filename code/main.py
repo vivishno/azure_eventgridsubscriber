@@ -138,13 +138,16 @@ def main():
         endpoint_url = function_url
     )
     included_events=get_events_list(events_to_subscribe)
-    filter = EventSubscriptionFilter(
+    print(included_events)
+    if included_events==None:
+        print("yess-----------------")
+    #filter = EventSubscriptionFilter(
         # By default, "All" event types are included
-        included_event_types = included_events,
-        is_subject_case_sensitive=False,
-        subject_begins_with='',
-        subject_ends_with=''
-    )
+    #    included_event_types = included_events,
+    #    is_subject_case_sensitive=False,
+    #    subject_begins_with='',
+    #    subject_ends_with=''
+    #)
 
     event_subscription_info = EventSubscription(
         destination=destination, filter=filter)
