@@ -140,7 +140,7 @@ def main():
     included_events=get_events_list(events_to_subscribe)
     filter = EventSubscriptionFilter(
         # By default, "All" event types are included
-        included_event_types = included_events,
+        included_event_types = None,
         is_subject_case_sensitive=False,
         subject_begins_with='',
         subject_ends_with=''
