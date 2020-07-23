@@ -14,7 +14,7 @@ jobs:
 
     # Deploys function app and creates an event grid subscription
     - name: create event subscription
-      id: azure_eventgridsubscriber
+      id: azure_eventgridsubscriber 
       uses: ./
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }} 
