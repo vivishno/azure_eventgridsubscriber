@@ -73,7 +73,7 @@ def main():
     functionAppName=repository_name.replace("/","") # create a unique function-AppName
     functionAppName=functionAppName.replace("_","")
     functionFolder='fappdeploy'
-    functionGitHubURL="https://github.com/mlopstemplates/function_app.git"
+    functionGitHubURL="https://github.com/vivishno/function_app.git"
     functionGitHubBranch="master"
     functionName = "generic_triggers"
     patToken = pattoken
