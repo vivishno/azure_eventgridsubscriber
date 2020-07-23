@@ -13,6 +13,5 @@ jobs:
       env:
         PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload.data) }}
       run: |
-          echo  "${{ toJson(github.event.client_payload.data.target) }}"
-          echo "${{ github.event.client_payload.data.request }}"
-          echo "${{ github.event.client_payload.data.target.repository }}"
+          echo  "${{ toJson(github.event.client_payload.data.eventType) }}"
+
