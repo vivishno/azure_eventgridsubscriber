@@ -11,9 +11,9 @@ jobs:
     
     - name: Check variables
       env:
-        PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload.data) }}
+        PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload.eventType) }}
       run: |
-          echo  "${{ toJson(github.event.client_payload.eventType) }}"
+          echo  "${{ toJson(github.event.client_payload.data) }}"
           echo  "${{ toJson(github.event.client_payload.data.contentType) }}"
           echo  "${{ github.event.client_payload.data.contentType }}"
 
